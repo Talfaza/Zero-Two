@@ -1,27 +1,30 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TokenManager {
-    private Queue<String> tokens;
-    private String currentToken;
+    private List<String> tokens;
+    private int currentIndex;
 
-    public TokenManager(String entry) {
-        tokens = new LinkedList<>();
-        tokenize(entry);
-        currentToken = null;
+    public TokenManager(String input) {
+        tokens = tokenize(input);
+        currentIndex = 0;
     }
 
-    private void tokenize(String entry) {
-        String regex = "([0-9]+|[\\+\\-\\*/\\^\\(\\)]|#)";
-        entry = entry.replaceAll("\\s+", "");
-        String[] tokenArray = entry.split("(?<=" + regex + ")|(?=" + regex + ")");
-        for (String token : tokenArray) {
-            tokens.add(token);
+    private List<String> tokenize(String input) {
+        List<String> result = new ArrayList<>();
+        String regex = "\\s*([A-Za-z]+|[0-9]+|\\+|\\-|\\*|\\/|\\^|\\(|\\)|=|#)\\s*";
+        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile(regex).matcher(input);
+        while (matcher.find()) {
+            result.add(matcher.group(1));
         }
+        result.add("#");
+        return result;
     }
 
     public String suivant() {
-        currentToken = tokens.isEmpty() ? "#" : tokens.poll();
-        return currentToken;
+        if (currentIndex < tokens.size()) {
+            return tokens.get(currentIndex++);
+        }
+        return null;
     }
 }
