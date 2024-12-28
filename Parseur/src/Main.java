@@ -1,23 +1,20 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class Main {
     public static void main(String[] args) {
+        Map<String, Integer> variables = new HashMap<>();
+
         String[] testCases = {
-                "35+5",
-                "(2+3)*4",
-                "47^3+2",
-                "(1+2)*(3-4)",
-                "7+8*2#",
-                "(5+3)",
-                "45 + (777^3 - 76 + 76) / (5681 + 876 * 7)",
-                "6 * 10 + ((17 + 7) * 12) ",
-                "((5681 + 876 * 7) + (777^3 - 76 + 76)) / (5681 + 876 * 7)",
-                "() + 3",
-                "d = (28802* 837782398 - 83889) / 12463 + 78873290-67373 + 2^(5363)"
+                "X = 60",
+                "y = X/2 + 2",
+                "z = print(1+1)"
         };
 
         for (String testCase : testCases) {
             System.out.println("Testing: " + testCase);
             TokenManager tm = new TokenManager(testCase);
-            Parser parser = new Parser(tm);
+            Parser parser = new Parser(tm, variables);
 
             try {
                 parser.parse();
@@ -26,5 +23,11 @@ public class Main {
                 System.out.println("Result: Error - " + e.getMessage() + "\n");
             }
         }
+
+        String cmd = "print(z + y)";
+        TokenManager tm = new TokenManager(cmd);
+        Parser parser = new Parser(tm, variables);
+        parser.Print();
     }
 }
+
