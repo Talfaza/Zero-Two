@@ -15,7 +15,7 @@ public class TokenManager {
     // Hna katdir tokenize: katfraq string l parts mn input
     private List<String> tokenize(String input) {
         List<String> result = new ArrayList<>(); // Khzini tokens f list
-        String regex = "\\s*([A-Za-z]+|[0-9]+|\\+|\\-|\\*|\\/|\\^|\\(|\\)|=|#)\\s*";
+        String regex = "\\s*([A-Za-z]+|[0-9]+|\\+|\\-|\\*|\\/|\\^|\\(|\\)|:=|#)\\s*";
         // Regex hadi katqabatch l tokens mgharba (letters, numbers, operators...)
         java.util.regex.Matcher matcher = java.util.regex.Pattern.compile(regex).matcher(input);
         while (matcher.find()) { // Kul token katchado matcher
@@ -33,3 +33,4 @@ public class TokenManager {
         return null; // Null ila khlassat tokens
     }
 }
+
