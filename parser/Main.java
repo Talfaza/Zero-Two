@@ -10,12 +10,13 @@ import java.util.Map;
  * ****/
 public class Main {
     public static void main(String[] args) {
-        Map<String, Integer> variables = new HashMap<>();
+        Map<String, Double> variables = new HashMap<>();
 
         String[] testCases = {
-                "X = 60",
-                "y = X/2 + 2",
-                "z = print(1+1)"
+                "X := 60",
+                "y := X/2 + 2",
+                "z := print(1+1)",
+                "print(1)"
         };
 
         for (String testCase : testCases) {
