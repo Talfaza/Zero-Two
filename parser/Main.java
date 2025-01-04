@@ -2,6 +2,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
+    // ANSI escape codes for colors
+    private static final String RESET = "\u001B[0m";
+    private static final String GREEN = "\u001B[32m";
+    private static final String RED = "\u001B[31m";
+
     public static void main(String[] args) {
         Map<String, Double> variables = new HashMap<>();
 
@@ -21,9 +26,9 @@ public class Main {
 
             try {
                 parser.parse();
-                System.out.println("Result: Success\n");
+                System.out.println(GREEN + "Result: Success" + RESET + "\n");
             } catch (RuntimeException e) {
-                System.out.println("Result: Error - " + e.getMessage() + "\n");
+                System.out.println(RED + "Result: Error - " + e.getMessage() + RESET + "\n");
             }
         }
 
@@ -34,8 +39,9 @@ public class Main {
 
         try {
             parser.parse();
+            System.out.println(GREEN + "Result: Success" + RESET);
         } catch (RuntimeException e) {
-            System.out.println("Result: Error - " + e.getMessage());
+            System.out.println(RED + "Result: Error - " + e.getMessage() + RESET);
         }
     }
 }
