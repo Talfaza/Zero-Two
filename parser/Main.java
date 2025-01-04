@@ -16,7 +16,10 @@ public class Main {
                 "X := 60",
                 "y := X/2 + 2",
                 "z := print(1+1)",
-                "print(1)"
+                "print(1)",
+                "print(x)",
+                "1"
+
         };
 
         for (String testCase : testCases) {
