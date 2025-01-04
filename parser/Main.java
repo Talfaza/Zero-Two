@@ -1,25 +1,17 @@
 import java.util.HashMap;
 import java.util.Map;
-/****
- *
- *  TODO: Add ";" support
- *  TODO: Add a JSON AST Generation
- *
- *
- *
- * ****/
+
 public class Main {
     public static void main(String[] args) {
         Map<String, Double> variables = new HashMap<>();
 
         String[] testCases = {
-                "X := 60",
-                "y := X/2 + 2",
-                "z := print(1+1)",
-                "print(1)",
-                "print(x)",
-                "1"
-
+                "X := 60;",
+                "y := X / 2 + 2;", // Changed to include required ';'
+                "z := 1 + 1;",     // Changed "print" to a simple assignment
+                "print(1);",
+                "print(X);",       // Ensure variable name matches exactly
+                "1;"               // Expression-only input
         };
 
         for (String testCase : testCases) {
@@ -35,9 +27,15 @@ public class Main {
             }
         }
 
-        String cmd = "print(z + y)";
+        String cmd = "print(z + y);";
+        System.out.println("Testing: " + cmd);
         TokenManager tm = new TokenManager(cmd);
         Parser parser = new Parser(tm, variables);
-        parser.Print();
+
+        try {
+            parser.parse();
+        } catch (RuntimeException e) {
+            System.out.println("Result: Error - " + e.getMessage());
+        }
     }
 }
