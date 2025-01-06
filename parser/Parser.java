@@ -4,12 +4,25 @@ public class Parser {
     private TokenManager tm;
     private String tc;
     private Map<String, Double> variables;
+    private ASTNode root; // Root node for the AST
 
     public Parser(TokenManager tm, Map<String, Double> variables) {
         this.tm = tm;
         this.variables = variables;
         avancer();
     }
+
+public ASTNode parse() {
+    root = new ASTNode("Program");
+    while (!tc.equals("#")) {
+        if (tc.equals("print")) {
+            root.addChild(Print());
+        } else {
+            root.addChild(Variables());
+        }
+    }
+    return root;
+}
 
     private void avancer() {
         tc = tm.suivant();
@@ -23,120 +36,95 @@ public class Parser {
         }
     }
 
-    public void parse() {
-        try {
-            if (tc.equals("print")) {
-                Print();
-            } else {
-                Variables();
-            }
-            if (!tc.equals("#")) {
-                throw new RuntimeException("Erreur: caractères restants après l'analyse");
-            }
-        } catch (RuntimeException e) {
-            throw e;
-        }
-    }
-
-    private void Variables() {
-        if (tc.equals("print")) {
-            Print();
-        } else if (isVariable(tc)) {
+    private ASTNode Variables() {
+        if (isVariable(tc)) {
             String varName = tc;
-            System.out.println("variable: " + varName);
             consommer(tc);
-            if (tc.equals(":=")) {
-                consommer(":=");
-                double value = Calculat();
-                variables.put(varName, value);
-                consommer(";");
-            } else {
-                throw new RuntimeException("Erreur: attendu ':=', mais trouvé '" + tc + "'");
-            }
+            consommer(":=");
+            ASTNode assignmentNode = new ASTNode("Assignment");
+            assignmentNode.name = varName;
+            assignmentNode.addChild(Calculat());
+            consommer(";");
+            return assignmentNode;
         } else {
             throw new RuntimeException("Erreur: attendu une commande ou une expression");
         }
     }
 
-    public void Print() {
+    private ASTNode Print() {
         consommer("print");
         consommer("(");
-        double result = Calculat();
+        ASTNode printNode = new ASTNode("Print");
+        printNode.addChild(Calculat());
         consommer(")");
-        System.out.println("Result: " + result);
         consommer(";");
+        return printNode;
     }
 
-    private double Calculat() {
+    private ASTNode Calculat() {
         return Expression();
     }
 
-    private double Expression() {
-        double result = Term();
+    private ASTNode Expression() {
+        ASTNode left = Term();
         while (tc.equals("+") || tc.equals("-")) {
             String op = tc;
             consommer(op);
-            double value = Term();
-            if (op.equals("+")) {
-                result += value;
-            } else if (op.equals("-")) {
-                result -= value;
-            }
+            ASTNode expressionNode = new ASTNode("Expression");
+            expressionNode.operator = op;
+            expressionNode.addChild(left);
+            expressionNode.addChild(Term());
+            left = expressionNode;
         }
-        return result;
+        return left;
     }
 
-    private double Term() {
-        double result = Factor();
+    private ASTNode Term() {
+        ASTNode left = Factor();
         while (tc.equals("*") || tc.equals("/")) {
             String op = tc;
             consommer(op);
-            double value = Factor();
-            if (op.equals("*")) {
-                result *= value;
-            } else if (op.equals("/")) {
-                result /= value;
-            }
+            ASTNode termNode = new ASTNode("Term");
+            termNode.operator = op;
+            termNode.addChild(left);
+            termNode.addChild(Factor());
+            left = termNode;
         }
-        return result;
+        return left;
     }
 
-    private double Factor() {
-        double result = Base();
+    private ASTNode Factor() {
+        ASTNode base = Base();
         if (tc.equals("^")) {
             consommer("^");
-            result = Math.pow(result, Factor());
+            ASTNode factorNode = new ASTNode("Factor");
+            factorNode.operator = "^";
+            factorNode.addChild(base);
+            factorNode.addChild(Factor());
+            return factorNode;
         }
-        return result;
+        return base;
     }
 
-    private double Base() {
+    private ASTNode Base() {
         if (tc.equals("(")) {
             consommer("(");
-            double result = Expression();
+            ASTNode result = Expression();
             consommer(")");
             return result;
         } else if (isNumber(tc)) {
-            return Number();
+            return new ASTNode("Literal") {{
+                value = Double.parseDouble(tc);
+                consommer(tc);
+            }};
         } else if (isVariable(tc)) {
             String varName = tc;
             consommer(tc);
-            if (!variables.containsKey(varName)) {
-                return 0.0;
-            }
-            return variables.get(varName);
+            ASTNode variableNode = new ASTNode("Variable");
+            variableNode.name = varName;
+            return variableNode;
         } else {
             throw new RuntimeException("Erreur: attendu un nombre, '(', ou 'print', mais trouvé '" + tc + "'");
-        }
-    }
-
-    private double Number() {
-        if (isNumber(tc)) {
-            String num = tc;
-            consommer(tc);
-            return Double.parseDouble(num);
-        } else {
-            throw new RuntimeException("Erreur: attendu un nombre, mais trouvé '" + tc + "'");
         }
     }
 

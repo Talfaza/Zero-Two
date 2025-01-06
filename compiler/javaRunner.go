@@ -9,7 +9,8 @@ import (
 func main() {
 	fmt.Println("Compiling Java code...")
 
-	cmd := exec.Command("sh", "-c", "cd parser && javac -cp lib/gson-2.8.9.jar *.java && cd ..")
+	// Compile all Java files in the 'parser' directory
+	cmd := exec.Command("sh", "-c", "cd parser && javac *.java && cd ..")
 	cmd.Stderr = os.Stderr
 
 	err := cmd.Run()
@@ -20,9 +21,10 @@ func main() {
 	fmt.Println("Compilation successful.")
 
 	fmt.Println("Running Java Code...")
-	codeRun := exec.Command("sh", "-c", "cd parser && java -cp .:lib/gson-2.8.9.jar Main && cd ..")
+	// Run the main Java class in the 'parser' directory
+	codeRun := exec.Command("sh", "-c", "cd parser && java Main && cd ..")
 
-	output, err := codeRun.CombinedOutput() 
+	output, err := codeRun.CombinedOutput()
 	if err != nil {
 		fmt.Println("Error during execution:", err)
 		return
@@ -32,6 +34,7 @@ func main() {
 	fmt.Println(string(output))
 
 	fmt.Println("Deleting .class files...")
+	// Delete all .class files in the 'parser' directory
 	deleteCmd := exec.Command("sh", "-c", "cd parser && rm -f *.class && cd ..")
 	deleteOutput, err := deleteCmd.CombinedOutput()
 	if err != nil {
