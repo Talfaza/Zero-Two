@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zerotwo Compiler Output</title>
+  </head>
+  <body>
+    <h1>Compiler Output:</h1>
+    <pre id="output"></pre>
+    <script>
+      const { ipcRenderer } = require("electron");
+
+      // Listen for the output data
+      ipcRenderer.on("output", (event, data) => {
+        document.getElementById("output").innerText += data + "\n";
+      });
+
+      // Listen for any errors
+      ipcRenderer.on("error", (event, data) => {
+        document.getElementById("output").innerText += "Error: " + data + "\n";
+      });
+
+      // Listen for process exit status
+      ipcRenderer.on("exit", (event, data) => {
+        document.getElementById("output").innerText += "Exit: " + data + "\n";
+      });
+    </script>
+  </body>
+</html>
