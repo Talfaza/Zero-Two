@@ -4,16 +4,18 @@
 - Linux (RHEL) :
 
 ```bash
-$ sudo dnf install llvm llvm-devel clang java-17-openjdk java-17-openjdk-devel  -y
+$ sudo dnf install gcc-c++ make cmake 
 ```
-
-- packages :
+## Setup : 
 
 ```bash
-go get github.com/llir/llvm/...
-
+git clone https://github.com/Talfaza/Zero-Two-Compiler/
+cd Zero-Two-Compiler/compiler
+make clean;make
+./zerotwo <file>.zt
 ```
 
-## Architecture : 
-![image](https://github.com/user-attachments/assets/153638ef-3d47-4040-b5fc-3a392d618787)
+
+## Architecture (Backend) : 
+![image](https://github.com/user-attachments/assets/4bc953dc-5bf4-46bf-b39b-88b4307ba78b)
 
