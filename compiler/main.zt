@@ -1,0 +1,14 @@
+x := 1;
+afficher(x);
+y := x + 1;
+afficher(y);
+z := x + y;
+afficher(z);
+afficher(5 + 1);
+afficher(10 - 3);
+afficher(4 * 2);
+afficher(8 / 2);
+afficher(10 % 3);
+afficher(x + y);
+afficher(y * 2);
+afficher("Hello, world!");
