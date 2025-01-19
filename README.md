@@ -9,8 +9,8 @@ $ sudo dnf install gcc-c++ make cmake
 ## Setup : 
 
 ```bash
-git clone https://github.com/Talfaza/Zero-Two-Compiler/
-cd Zero-Two-Compiler/compiler
+git clone https://github.com/Talfaza/Zero-Two/
+cd Zero-Two/compiler
 make clean;make
 ./zerotwo <file>.zt
 ```
