@@ -21,9 +21,3 @@ make clean;make
 ```
 
 
-## Architecture (Backend) : 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/4bc953dc-5bf4-46bf-b39b-88b4307ba78b" alt="arch"/>
-</p>
-
-
